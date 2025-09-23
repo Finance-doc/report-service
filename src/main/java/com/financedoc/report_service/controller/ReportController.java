@@ -10,7 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportController {
 
     @GetMapping("/test")
-    public String test(@RequestHeader("X-User-Email") String email) {
-        return "Report Service Test OK & X-User-Email = "+ email;
+    public String test(
+            @RequestHeader(value = "X-User-Email", required = false) String email
+    ){
+        if (email == null) {
+            email = "null token"; // 기본값
+        }
+
+        return "Report Service Test OK & X-User-Email = "+email;
     }
+
 }
