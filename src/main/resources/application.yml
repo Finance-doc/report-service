@@ -5,6 +5,11 @@ spring:
   application:
     name: report-service
 
+  datasource:
+    url: ${REPORT_DATASOURCE_URL}
+    username: ${REPORT_DATASOURCE_USERNAME}
+    password: ${REPORT_DATASOURCE_PASSWORD}
+
 management:
   endpoints:
     web:
