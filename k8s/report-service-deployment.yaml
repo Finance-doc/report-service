@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: report-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: report-service
+  template:
+    metadata:
+      labels:
+        app: report-service
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: report-service
+          image: financedoc.kr.ncr.ntruss.com/report-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REPORT_DATASOURCE_URL
+              value: jdbc:postgresql://report-db.db.svc.cluster.local:5432/reportdb
+            - name: REPORT_DATASOURCE_USERNAME
+              value: user
+            - name: REPORT_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: report-db-secret
+                  key: REPORT_DATASOURCE_PASSWORD

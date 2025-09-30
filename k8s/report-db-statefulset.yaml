@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: report-db
+  namespace: db
+spec:
+  serviceName: report-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: report-db
+  template:
+    metadata:
+      labels:
+        app: report-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: reportdb
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: report-db-secret
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata  # 서브디렉터리
+          volumeMounts:
+            - name: report-db-storage
+              mountPath: /var/lib/postgresql/data  # PVC 루트 마운트
+  volumeClaimTemplates:
+    - metadata:
+        name: report-db-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: nks-block-storage
