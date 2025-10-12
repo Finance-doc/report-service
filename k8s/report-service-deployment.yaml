@@ -29,3 +29,10 @@ spec:
                 secretKeyRef:
                   name: report-db-secret
                   key: REPORT_DATASOURCE_PASSWORD
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
