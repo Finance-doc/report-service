@@ -1,0 +1,23 @@
+package com.report.finance.controller;
+
+import com.report.finance.dto.SummaryReportDto;
+import com.report.finance.service.SummaryReportService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/report/api/summary")
+@RequiredArgsConstructor
+public class SummaryReportController {
+
+    private final SummaryReportService summaryReportService;
+
+    // 월별 리포트
+    @GetMapping("/report")
+    public SummaryReportDto.Res getMonthlyReport(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return summaryReportService.getMonthlyReport(userId, year, month);
+    }
+}
