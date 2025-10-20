@@ -16,7 +16,7 @@ public class ExpenseCategoryController {
 
     private final ExpenseCategoryService categoryService;
 
-    // 생성
+    // 커스텀 지출 카테고리 생성
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExpenseCategoryDto.Res create(
@@ -26,13 +26,13 @@ public class ExpenseCategoryController {
         return categoryService.create(req, userId);
     }
 
-    // 전체 조회
+    // 커스텀 지출 카테고리 전체 조회
     @GetMapping
     public List<ExpenseCategoryDto.Res> list(@RequestHeader("X-User-Id") Long userId) {
         return categoryService.list(userId);
     }
 
-    // 단건 조회
+    // 커스텀 지출 카테고리 단건 조회
     @GetMapping("/{id}")
     public ExpenseCategoryDto.Res get(
             @RequestHeader("X-User-Id") Long userId,

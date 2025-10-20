@@ -19,7 +19,7 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
-
+    // 지출등록
     @PostMapping
     public ExpenseDto.Res create(
             @RequestHeader("X-User-Id") Long userId,
@@ -28,6 +28,7 @@ public class ExpenseController {
         return expenseService.create(req, userId);
     }
 
+    // 지출목록조회
     @GetMapping
     public List<ExpenseDto.Res> list(
             @RequestHeader("X-User-Id") Long userId,
