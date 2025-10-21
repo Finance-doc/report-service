@@ -28,7 +28,12 @@ public class GoalServiceImpl implements GoalService {
     public GoalDto.Res createOrUpdate(GoalDto.Req req, Long userId) {
         Goal goal = goalRepository.findByUserId(userId)
                 .map(existing -> {
-                    existing.update(req.getIncomeGoal(), req.getExpenseGoal());
+                    if (req.getIncomeGoal() != null) {
+                        existing.setIncomeGoal(req.getIncomeGoal());
+                    }
+                    if (req.getExpenseGoal() != null) {
+                        existing.setExpenseGoal(req.getExpenseGoal());
+                    }
                     return existing;
                 })
                 .orElseGet(() -> Goal.builder()
