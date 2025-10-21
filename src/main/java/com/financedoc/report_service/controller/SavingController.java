@@ -22,7 +22,7 @@ public class SavingController {
     @PostMapping
     public SavingDto.Res create(
             @RequestHeader("X-User-Id") Long userId,
-            @RequestBody @Valid SavingDto.CreateReq req) {
+            @RequestBody SavingDto.CreateReq req) {
         return savingService.create(req, userId);
     }
 
