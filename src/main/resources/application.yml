@@ -5,7 +5,7 @@ spring:
   application:
     name: edu-service
   profiles:
-    active: local
+    active: k8s
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
