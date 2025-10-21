@@ -22,7 +22,7 @@ public class IncomeController {
      */
     @PostMapping
     public IncomeDto.Res create(
-            @RequestHeader("X-USER-ID") Long userId,
+            @RequestHeader("X-User-Id") Long userId,
             @RequestBody @Valid IncomeDto.CreateReq req
     ) {
         // 헤더에서 받은 userId를 DTO에 주입해서 Service로 전달
@@ -41,7 +41,7 @@ public class IncomeController {
      */
     @GetMapping
     public List<IncomeDto.Res> list(
-            @RequestHeader("X-USER-ID") Long userId,
+            @RequestHeader("X-User-Id") Long userId,
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(required = false, name = "startDate")
