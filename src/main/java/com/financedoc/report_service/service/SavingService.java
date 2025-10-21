@@ -6,6 +6,6 @@ import java.util.List;
 
 
 public interface SavingService {
-    SavingDto.Res create(SavingDto.CreateReq req);
-    List<SavingDto.Res> findByRange(LocalDate startDate, LocalDate endDate);
+    SavingDto.Res create(SavingDto.CreateReq req, Long userId);
+    List<SavingDto.Res> findByRange(Long userId, LocalDate startDate, LocalDate endDate);
 }

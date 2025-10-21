@@ -24,7 +24,6 @@ public class ExpenseController {
     public ExpenseDto.Res create(
             @RequestHeader("X-User-Id") Long userId,
             @RequestBody @Valid ExpenseDto.CreateReq req) {
-
         return expenseService.create(req, userId);
     }
 

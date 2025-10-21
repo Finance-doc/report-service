@@ -20,14 +20,18 @@ public class SavingController {
 
 
     @PostMapping
-    public SavingDto.Res create(@RequestBody @Valid SavingDto.CreateReq req) {
-        return savingService.create(req);
+    public SavingDto.Res create(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestBody @Valid SavingDto.CreateReq req) {
+        return savingService.create(req, userId);
     }
 
 
     @GetMapping
-    public List<SavingDto.Res> list(@RequestParam int year, @RequestParam int month) {
+    public List<SavingDto.Res> list(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestParam int year, @RequestParam int month) {
         YearMonth ym = YearMonth.of(year, month);
-        return savingService.findByRange(ym.atDay(1), ym.atEndOfMonth());
+        return savingService.findByRange(userId, ym.atDay(1), ym.atEndOfMonth());
     }
 }

@@ -22,8 +22,7 @@ public class SavingServiceImpl implements SavingService {
     private final IncomeRepository incomeRepository;
 
     @Override
-    public SavingDto.Res create(SavingDto.CreateReq req) {
-        Long userId = req.userId();
+    public SavingDto.Res create(SavingDto.CreateReq req, Long userId) {
         LocalDate date = req.date();
         YearMonth ym = YearMonth.from(date);
         LocalDate start = ym.atDay(1);
@@ -60,9 +59,9 @@ public class SavingServiceImpl implements SavingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SavingDto.Res> findByRange(LocalDate startDate, LocalDate endDate) {
+    public List<SavingDto.Res> findByRange(Long userId, LocalDate startDate, LocalDate endDate) {
         // 유저별로 보여주려면 userId를 인자로 추가하는 게 좋음 (아래 참고)
-        return savingRepository.findAllByUserIdAndDateBetweenOrderByDateAsc(1L, startDate, endDate).stream()
+        return savingRepository.findAllByUserIdAndDateBetweenOrderByDateAsc(userId, startDate, endDate).stream()
                 .map(s -> new SavingDto.Res(s.getId(), s.getDate(), s.getAmount()))
                 .toList();
     }
