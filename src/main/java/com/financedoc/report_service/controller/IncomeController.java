@@ -23,7 +23,7 @@ public class IncomeController {
     @PostMapping
     public IncomeDto.Res create(
             @RequestHeader("X-User-Id") Long userId,
-            @RequestBody @Valid IncomeDto.CreateReq req
+            @RequestBody IncomeDto.CreateReq req
     ) {
         // 헤더에서 받은 userId를 DTO에 주입해서 Service로 전달
         IncomeDto.CreateReq withUser = new IncomeDto.CreateReq(
