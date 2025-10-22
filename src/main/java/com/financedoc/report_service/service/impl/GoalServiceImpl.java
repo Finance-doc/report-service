@@ -20,7 +20,12 @@ public class GoalServiceImpl implements GoalService {
     @Transactional(readOnly = true)
     public GoalDto.Res get(Long userId) {
         Goal goal = goalRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("사용자의 목표 금액이 설정되지 않았습니다."));
+                .orElseGet(() -> Goal.builder()
+                        .userId(userId)
+                        .incomeGoal(0L)
+                        .expenseGoal(0L)
+                        .build() // 기본값으로 세팅된 Goal 반환
+                );
         return GoalDto.Res.fromEntity(goal);
     }
 
