@@ -38,7 +38,7 @@ public class SummaryServiceImpl implements SummaryService {
         long net = income - expense - saving; // 순자산
 
         // ✅ 카테고리별 월간 지출 합계
-        List<Object[]> rawCategoryExpenses = expenseRepository.sumByCategoryAndMonth(userId, ym);
+        List<Object[]> rawCategoryExpenses = expenseRepository.sumByCategoryAndMonth(userId, ym.getYear(), ym.getMonthValue());
         List<CategoryExpense> categoryExpenses = rawCategoryExpenses.stream()
                 .map(obj -> new CategoryExpense(
                         obj[0] != null ? (String) obj[0] : "기타",

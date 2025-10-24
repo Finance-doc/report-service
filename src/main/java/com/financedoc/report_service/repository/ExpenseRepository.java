@@ -45,10 +45,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
         FROM Expense e
         JOIN e.category c
         WHERE e.userId = :userId
-        AND FUNCTION('YEAR', e.date) = :#{#ym.year}
-        AND FUNCTION('MONTH', e.date) = :#{#ym.monthValue}
+        AND EXTRACT(YEAR FROM e.date) = :year
+        AND EXTRACT(MONTH FROM e.date) = :month
         GROUP BY c.name
     """)
     List<Object[]> sumByCategoryAndMonth(@Param("userId") Long userId,
-                                         @Param("ym") YearMonth ym);
+                                         @Param("year") int year,
+                                         @Param("month") int month);
 }

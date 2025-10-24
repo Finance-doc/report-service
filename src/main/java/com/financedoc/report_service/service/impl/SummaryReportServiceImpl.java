@@ -54,7 +54,7 @@ public class SummaryReportServiceImpl implements SummaryReportService {
                 .collect(Collectors.toList());
 
         // 카테고리별 지출
-        List<Object[]> categoryRaw = expenseRepository.sumByCategoryAndMonth(userId, target);
+        List<Object[]> categoryRaw = expenseRepository.sumByCategoryAndMonth(userId, target.getYear(), target.getMonthValue() );
         List<SummaryReportDto.Res.CategoryExpense> categoryExpenses = categoryRaw.stream()
                 .map(r -> SummaryReportDto.Res.CategoryExpense.builder()
                         .categoryName((String) r[0])
