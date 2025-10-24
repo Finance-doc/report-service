@@ -90,8 +90,8 @@ public class SummaryReportServiceImpl implements SummaryReportService {
         int score = 100;
 
         // 목표 미설정 시 기본 감점
-        if (expenseGoal == null) score -= 10;
-        if (incomeGoal == null) score -= 10;
+        if (expenseGoal == null) score -= 20;
+        if (incomeGoal == null) score -= 20;
 
         // 과소비 감점
         if (expenseGoal != null && totalExpense > expenseGoal) {
