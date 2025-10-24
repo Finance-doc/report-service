@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +30,20 @@ public class SummaryServiceImpl implements SummaryService {
         LocalDate end = ym.atEndOfMonth();
 
         // ✅ userId 포함된 Repository 메서드로 수정
-        long income = incomeRepository.sumByUserAndDateBetween(userId, start, end);
-        long expense = expenseRepository.sumByUserAndDateBetween(userId, start, end);
-        long saving = savingRepository.sumByUserAndDateBetween(userId, start, end);
+        long income = Optional.ofNullable(incomeRepository.sumByUserAndDateBetween(userId, start, end)).orElse(0L);
+        long expense = Optional.ofNullable(expenseRepository.sumByUserAndDateBetween(userId, start, end)).orElse(0L);
+        long saving = Optional.ofNullable(savingRepository.sumByUserAndDateBetween(userId, start, end)).orElse(0L);
 
-        long remainingSavable = Math.max(0, income - saving);
-        long net = income - expense - saving;
+        long remainingSavable = Math.max(0, income - saving); // 저축가능금액
+        long net = income - expense - saving; // 순자산
 
         // ✅ 카테고리별 월간 지출 합계
         List<Object[]> rawCategoryExpenses = expenseRepository.sumByCategoryAndMonth(userId, ym);
         List<CategoryExpense> categoryExpenses = rawCategoryExpenses.stream()
-                .map(obj -> new CategoryExpense((String) obj[0], ((Number) obj[1]).longValue()))
+                .map(obj -> new CategoryExpense(
+                        obj[0] != null ? (String) obj[0] : "기타",
+                        obj[1] != null ? ((Number) obj[1]).longValue() : 0L
+                ))
                 .toList();
 
         return new SummaryDto.MonthRes(
