@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,8 +30,10 @@ public class SummaryReportServiceImpl implements SummaryReportService {
         YearMonth target = YearMonth.of(year, month);
 
         // 이번 달 총 수입/지출
-        long totalExpense = expenseRepository.sumByUserAndMonth(userId, target);
-        long totalIncome = incomeRepository.sumByUserAndMonth(userId, target);
+        long totalExpense = Optional.ofNullable(
+                expenseRepository.sumByUserAndMonth(userId, target.getYear(), target.getMonthValue())).orElse(0L);
+        long totalIncome = Optional.ofNullable(
+                incomeRepository.sumByUserAndMonth(userId, target.getYear(), target.getMonthValue())).orElse(0L);
 
         // 목표 금액 (optional)
         Goal goal = goalRepository.findByUserId(userId).orElse(null);
@@ -49,7 +52,9 @@ public class SummaryReportServiceImpl implements SummaryReportService {
                 .map(ym -> SummaryReportDto.Res.MonthlyExpense.builder()
                         .year(ym.getYear())
                         .month(ym.getMonthValue())
-                        .expense(expenseRepository.sumByUserAndMonth(userId, ym))
+                        .expense(Optional.ofNullable(
+                                expenseRepository.sumByUserAndMonth(userId, ym.getYear(), ym.getMonthValue())
+                        ).orElse(0L))
                         .build())
                 .collect(Collectors.toList());
 
@@ -58,7 +63,7 @@ public class SummaryReportServiceImpl implements SummaryReportService {
         List<SummaryReportDto.Res.CategoryExpense> categoryExpenses = categoryRaw.stream()
                 .map(r -> SummaryReportDto.Res.CategoryExpense.builder()
                         .categoryName((String) r[0])
-                        .amount((Long) r[1])
+                        .amount(((Number) r[1]).longValue())
                         .build())
                 .toList();
 

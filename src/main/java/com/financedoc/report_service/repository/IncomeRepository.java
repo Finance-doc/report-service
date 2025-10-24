@@ -33,9 +33,10 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
         SELECT COALESCE(SUM(i.amount), 0)
         FROM Income i
         WHERE i.userId = :userId
-        AND FUNCTION('YEAR', i.date) = :#{#ym.year}
-        AND FUNCTION('MONTH', i.date) = :#{#ym.monthValue}
+        AND EXTRACT(YEAR FROM i.date) = :year
+        AND EXTRACT(MONTH FROM i.date) = :month
     """)
     Long sumByUserAndMonth(@Param("userId") Long userId,
-                           @Param("ym") YearMonth ym);
+                           @Param("year") int year,
+                           @Param("month") int month);
 }

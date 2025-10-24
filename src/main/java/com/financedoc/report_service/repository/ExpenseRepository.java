@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
@@ -33,11 +32,12 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
         SELECT COALESCE(SUM(e.amount), 0)
         FROM Expense e
         WHERE e.userId = :userId
-        AND FUNCTION('YEAR', e.date) = :#{#ym.year}
-        AND FUNCTION('MONTH', e.date) = :#{#ym.monthValue}
+        AND EXTRACT(YEAR FROM e.date) = :year
+        AND EXTRACT(MONTH FROM e.date) = :month
     """)
     Long sumByUserAndMonth(@Param("userId") Long userId,
-                           @Param("ym") YearMonth ym);
+                           @Param("year") int year,
+                           @Param("month") int month);
 
     // ✅ 카테고리별 월간 지출 합계 (SummaryReport 용)
     @Query("""
