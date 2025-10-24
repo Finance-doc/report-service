@@ -73,4 +73,28 @@ public class ExpenseServiceImpl implements ExpenseService {
                 ))
                 .toList();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExpenseDto.Res findById(Long userId, Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .filter(e -> e.getUserId().equals(userId))
+                .orElseThrow(() -> new IllegalArgumentException("지출 내역을 찾을 수 없습니다: id=" + expenseId));
+        return new ExpenseDto.Res(
+                expense.getId(),
+                expense.getCategory().getId(),
+                expense.getCategory().getName(),
+                expense.getDate(),
+                expense.getAmount(),
+                expense.getDescription()
+        );
+    }
+
+    @Override
+    public void delete(Long userId, Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .filter(e -> e.getUserId().equals(userId))
+                .orElseThrow(() -> new IllegalArgumentException("지출 내역을 찾을 수 없습니다: id=" + expenseId));
+        expenseRepository.delete(expense);
+    }
 }

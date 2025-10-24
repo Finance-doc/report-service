@@ -46,6 +46,7 @@ public class SummaryReportServiceImpl implements SummaryReportService {
         double incomeRate = (incomeGoal != null && incomeGoal > 0)
                 ? ((double) totalIncome / incomeGoal) * 100 : 0.0;
 
+
         // 최근 6개월 지출 추이
         List<SummaryReportDto.Res.MonthlyExpense> last6Months = IntStream.rangeClosed(0, 5)
                 .mapToObj(i -> target.minusMonths(i))

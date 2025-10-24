@@ -8,4 +8,6 @@ public interface ExpenseService {
     ExpenseDto.Res create(ExpenseDto.CreateReq req, Long userId);
     List<ExpenseDto.Res> findByDate(Long userId, LocalDate date);
     List<ExpenseDto.Res> findByRange(Long userId, LocalDate startDate, LocalDate endDate);
+    ExpenseDto.Res findById(Long userId, Long expenseId);
+    void delete(Long userId, Long expenseId);
 }

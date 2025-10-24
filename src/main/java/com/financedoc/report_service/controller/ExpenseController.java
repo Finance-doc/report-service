@@ -39,5 +39,23 @@ public class ExpenseController {
         if (startDate != null && endDate != null) return expenseService.findByRange(userId, startDate, endDate);
         return expenseService.findByDate(userId, LocalDate.now());
     }
+
+    // 지출 단건 조회
+    @GetMapping("/{expenseId}")
+    public ExpenseDto.Res getOne(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long expenseId
+    ){
+        return expenseService.findById(userId, expenseId);
+    }
+
+    // ✅ 지출 단건 삭제
+    @DeleteMapping("/{expenseId}")
+    public void delete(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long expenseId
+    ) {
+        expenseService.delete(userId, expenseId);
+    }
 }
 
