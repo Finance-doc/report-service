@@ -86,17 +86,25 @@ public class SummaryReportServiceImpl implements SummaryReportService {
     }
 
     private int calculateFinancialScore(Long expenseGoal, long totalExpense, Long incomeGoal, long totalIncome) {
+        // 기본점수 100점
         int score = 100;
 
+        // 목표 미설정 시 기본 감점
+        if (expenseGoal == null) score -= 10;
+        if (incomeGoal == null) score -= 10;
+
+        // 과소비 감점
         if (expenseGoal != null && totalExpense > expenseGoal) {
             score -= Math.min(30, (int) ((totalExpense - expenseGoal) / (double) expenseGoal * 100 / 2));
         }
 
+        // 수입부족 관점
         if (incomeGoal != null && totalIncome < incomeGoal) {
             score -= Math.min(20, (int) ((incomeGoal - totalIncome) / (double) incomeGoal * 100 / 3));
         }
 
-        if (score < 40) score = 40; // 최소 점수
+        // 최소점수 보장
+        if (score < 40) score = 40;
         return score;
     }
 }
