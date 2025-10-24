@@ -1,5 +1,6 @@
 package com.financedoc.report_service.controller;
 
+import com.financedoc.report_service.dto.ExpenseDto;
 import com.financedoc.report_service.dto.IncomeDto;
 import com.financedoc.report_service.service.IncomeService;
 import jakarta.validation.Valid;
@@ -59,5 +60,23 @@ public class IncomeController {
 
         // 날짜 없을 경우 오늘 기준
         return incomeService.findByDate(userId, LocalDate.now());
+    }
+
+    // 소비 단건 조회
+    @GetMapping("/{incomeId}")
+    public IncomeDto.Res getOne(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long incomeId
+    ){
+        return incomeService.findById(userId, incomeId);
+    }
+
+    // 소비 단건 삭제
+    @DeleteMapping("/{incomeId}")
+    public void delete(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long incomeId
+    ) {
+        incomeService.delete(userId, incomeId);
     }
 }

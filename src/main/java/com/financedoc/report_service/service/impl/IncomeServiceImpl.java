@@ -1,6 +1,8 @@
 package com.financedoc.report_service.service.impl;
 
+import com.financedoc.report_service.domain.Expense;
 import com.financedoc.report_service.domain.Income;
+import com.financedoc.report_service.dto.ExpenseDto;
 import com.financedoc.report_service.dto.IncomeDto;
 import com.financedoc.report_service.repository.IncomeRepository;
 import com.financedoc.report_service.service.IncomeService;
@@ -59,5 +61,27 @@ public class IncomeServiceImpl implements IncomeService {
                         i.getDescription()
                 ))
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public IncomeDto.Res findById(Long userId, Long incomeId) {
+        Income income = incomeRepository.findById(incomeId)
+                .filter(e -> e.getUserId().equals(userId))
+                .orElseThrow(() -> new IllegalArgumentException("수입 내역을 찾을 수 없습니다: id=" + incomeId));
+        return new IncomeDto.Res(
+                income.getId(),
+                income.getDate(),
+                income.getAmount(),
+                income.getDescription()
+        );
+    }
+
+    @Override
+    public void delete(Long userId, Long incomeId) {
+        Income income = incomeRepository.findById(incomeId)
+                .filter(e -> e.getUserId().equals(userId))
+                .orElseThrow(() -> new IllegalArgumentException("수입 내역을 찾을 수 없습니다: id=" + incomeId));
+        incomeRepository.delete(income);
     }
 }

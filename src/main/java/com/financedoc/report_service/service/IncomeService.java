@@ -8,4 +8,6 @@ public interface IncomeService {
     IncomeDto.Res create(IncomeDto.CreateReq req);
     List<IncomeDto.Res> findByDate(Long userId, LocalDate date);
     List<IncomeDto.Res> findByRange(Long userId, LocalDate startDate, LocalDate endDate);
+    IncomeDto.Res findById(Long userId, Long incomeId);
+    void delete(Long userId, Long incomeId);
 }

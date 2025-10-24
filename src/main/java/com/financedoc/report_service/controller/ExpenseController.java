@@ -49,7 +49,7 @@ public class ExpenseController {
         return expenseService.findById(userId, expenseId);
     }
 
-    // ✅ 지출 단건 삭제
+    // 지출 단건 삭제
     @DeleteMapping("/{expenseId}")
     public void delete(
             @RequestHeader("X-User-Id") Long userId,
